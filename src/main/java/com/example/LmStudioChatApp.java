@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,6 @@ public class LmStudioChatApp extends Application {
     private ChatService chatService;
     private ListView<ChatMessage> chatListView;
     private TextArea inputArea;
-    private ComboBox<String> modelSelectionBox;
     private TextField serverUrlField;
     private List<String> examplePrompts;
     private VBox chatContainer;
@@ -161,17 +159,7 @@ public class LmStudioChatApp extends Application {
         serverUrlField = new TextField("http://localhost:8000/v1/chat/completions");
         HBox.setHgrow(serverUrlField, Priority.ALWAYS);
         
-        modelSelectionBox = new ComboBox<>();
-        modelSelectionBox.getItems().addAll(
-                "Mistral", "Llama", "Phi", "Claude", "Mixtral", "GPT-4", "Gemma", "Custom"
-        );
-        modelSelectionBox.setValue("Mistral");
-        modelSelectionBox.setPrefWidth(150);
-        
-        Button connectButton = new Button("Connect");
-        connectButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-        
-        serverBox.getChildren().addAll(serverLabel, serverUrlField, modelSelectionBox, connectButton);
+        serverBox.getChildren().addAll(serverLabel, serverUrlField);
         
         settingsBox.getChildren().addAll(headerBox, serverBox);
         return settingsBox;
