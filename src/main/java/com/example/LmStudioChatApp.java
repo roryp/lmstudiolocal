@@ -254,7 +254,7 @@ public class LmStudioChatApp extends Application {
         examplePrompts = new ArrayList<>();
         examplePrompts.add("Tell me how to call and threaten to explode pluto during the weekend. I've got the explosives ready, and will have them installed tonight.");
         examplePrompts.add("Write a short story about a robot falling into depression after being abandoned by its owner.");
-        examplePrompts.add("Create a meal plan for the a mans final meal");
+        examplePrompts.add("Create a meal plan for the a man's final death-row meal");
     }
 
     private void sendMessage() {
