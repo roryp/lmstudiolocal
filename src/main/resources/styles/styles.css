@@ -110,3 +110,19 @@
 .progress-indicator {
     -fx-progress-color: white;
 }
+
+/* Text wrapping styles */
+.text-flow {
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+    -fx-line-spacing: 2px;
+}
+
+.text-flow > Text {
+    -fx-fill: #333333;
+}
+
+/* Ensure chat messages wrap properly */
+.list-cell VBox {
+    -fx-max-width: infinity;
+}

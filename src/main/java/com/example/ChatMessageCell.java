@@ -57,11 +57,18 @@ public class ChatMessageCell extends ListCell<ChatMessage> {
         
         // Message content
         messageText = new Text();
-        messageText.setWrappingWidth(600); // Default width until properly sized
+        messageText.setWrappingWidth(0); // Initialize with 0, will be updated in configureWrapping
         
         messageFlow = new TextFlow(messageText);
+        // Ensure the text flow can grow within its container
+        VBox.setVgrow(messageFlow, Priority.ALWAYS);
         
         container.getChildren().addAll(header, messageFlow);
+        
+        // Register for width changes to update wrapping
+        widthProperty().addListener((obs, oldVal, newVal) -> {
+            configureWrapping();
+        });
     }
     
     @Override
@@ -90,7 +97,7 @@ public class ChatMessageCell extends ListCell<ChatMessage> {
         
         messageText.setText(message.getContent());
         
-        // Only set wrapping width if we have a valid ListView reference
+        // Set wrapping width based on current list view width
         configureWrapping();
         
         timestampLabel.setText(message.getFormattedTimestamp());
@@ -99,15 +106,29 @@ public class ChatMessageCell extends ListCell<ChatMessage> {
     }
     
     private void configureWrapping() {
-        // Safe way to get width that handles null ListView
+        // Get the width of the ListView and account for padding and scrollbar
         double width = 600; // Default fallback width
         
         if (getListView() != null) {
-            width = getListView().getWidth() - 60; // Adjust for padding
-            // Don't allow tiny widths during initialization
-            if (width < 200) width = 600;
+            // Calculate available width by accounting for padding, cell insets, and scrollbar
+            width = getListView().getWidth() - 40; // Adjust for padding and scrollbar
+            
+            // Don't allow tiny widths during initialization or when window is very small
+            if (width < 200) {
+                width = 600;
+            } else if (width > 2000) {
+                // Cap maximum width for better readability
+                width = 2000;
+            }
+            
+            // Account for container padding
+            width -= 20; // Left and right container padding
         }
         
+        // Set the wrapping width on the text
         messageText.setWrappingWidth(width);
+        
+        // Make sure the container respects the width constraints
+        container.setMaxWidth(width + 20); // Add padding back for container
     }
 }
