@@ -50,7 +50,17 @@ public class LmStudioChatApp extends Application {
         chatListView = new ListView<>();
         chatListView.setCellFactory(param -> new ChatMessageCell());
         chatListView.setStyle("-fx-background-color: transparent; -fx-background-insets: 0;");
+        
+        // Critical fix: Use USE_COMPUTED_SIZE for the cells to prevent overlapping
         chatListView.setFixedCellSize(Region.USE_COMPUTED_SIZE);
+        
+        // Add appropriate vertical spacing between items
+        chatListView.setCellFactory(listView -> {
+            ChatMessageCell cell = new ChatMessageCell();
+            // Add vertical spacing around each cell
+            cell.setPadding(new Insets(8, 0, 8, 0));
+            return cell;
+        });
         
         // Add list to a scroll pane for better control
         ScrollPane scrollPane = new ScrollPane(chatListView);
@@ -59,6 +69,12 @@ public class LmStudioChatApp extends Application {
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+        
+        // Force layout recalculation when viewport size changes
+        scrollPane.viewportBoundsProperty().addListener((obs, oldVal, newVal) -> {
+            Platform.runLater(() -> chatListView.refresh());
+        });
+        
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
         // Input area

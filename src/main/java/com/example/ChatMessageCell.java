@@ -30,7 +30,8 @@ public class ChatMessageCell extends ListCell<ChatMessage> {
     
     public ChatMessageCell() {
         container = new VBox(5);
-        container.setPadding(new Insets(10));
+        // Increase padding for better visual separation
+        container.setPadding(new Insets(15));
         
         header = new HBox(8);
         header.setAlignment(Pos.CENTER_LEFT);
@@ -69,6 +70,9 @@ public class ChatMessageCell extends ListCell<ChatMessage> {
         widthProperty().addListener((obs, oldVal, newVal) -> {
             configureWrapping();
         });
+        
+        // Add some bottom padding to this cell for separation between messages
+        setPadding(new Insets(0, 0, 10, 0));
     }
     
     @Override
@@ -87,6 +91,7 @@ public class ChatMessageCell extends ListCell<ChatMessage> {
             container.setStyle("-fx-background-color: #e3f2fd; -fx-background-radius: 10;");
             assistantIcon.setVisible(false);
             userIcon.setVisible(true);
+            header.getChildren().set(0, userIcon);
         } else {
             nameLabel.setText("Assistant");
             container.setStyle("-fx-background-color: #f5f5f5; -fx-background-radius: 10;");
@@ -111,7 +116,7 @@ public class ChatMessageCell extends ListCell<ChatMessage> {
         
         if (getListView() != null) {
             // Calculate available width by accounting for padding, cell insets, and scrollbar
-            width = getListView().getWidth() - 40; // Adjust for padding and scrollbar
+            width = getListView().getWidth() - 60; // Adjusted for padding and scrollbar
             
             // Don't allow tiny widths during initialization or when window is very small
             if (width < 200) {
@@ -130,5 +135,8 @@ public class ChatMessageCell extends ListCell<ChatMessage> {
         
         // Make sure the container respects the width constraints
         container.setMaxWidth(width + 20); // Add padding back for container
+        
+        // Request layout to ensure text is properly displayed
+        messageFlow.requestLayout();
     }
 }
